@@ -5,7 +5,6 @@ public class Task052Impl implements Task052 {
     @Override
     public boolean validateCard(long number) {
 
-
         StringBuilder stringBuilder = new StringBuilder(String.valueOf(number));
         if (stringBuilder.length() < 14 || stringBuilder.length() > 19 || number < 0) {
             throw new IllegalArgumentException();
