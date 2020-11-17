@@ -4,11 +4,23 @@ import com.epam.university.java.core.task008.Task008Impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Task053Impl implements Task053 {
 
-    private static final List<Character> characters = List.of(
-            '+', '-', '*', '/', '^', '(', ')'
+//    private static final List<Character> characters = List.of(
+//            '+', '-', '*', '/', '^', '(', ')'
+//    );
+
+    private static final Map<Character, Integer> characters = Map.of(
+            '(', 0,
+            ')', 0,
+            '+', 1,
+            '-', 1,
+            '*', 2,
+            '/', 2,
+            '^', 3
+
     );
 
     @Override
@@ -30,41 +42,86 @@ public class Task053Impl implements Task053 {
         }
         digits.add(' ');
 
-        List<Double> numbers = fromDigitsToInts(digits);
+        String rpnString = fromInfiniteToRpn(input);
+
+//        List<Double> numbers = fromDigitsToInts(digits);
 
         return 0;
     }
 
 
-
-
-
-
-    private String fromInfiniteToRpn(String infiniteStr){
+    private String fromInfiniteToRpn(String infiniteStr) {
         StringBuilder rpnString = new StringBuilder();
+        List<Character> stack = new ArrayList<>();
+
+        boolean numberIsOver;
+        for (Character c : infiniteStr.toCharArray()) {
+            if (Character.isDigit(c)) {
+                rpnString.append(c);
+                numberIsOver = false;
+            } else {
+                numberIsOver = true;
+                if (characters.containsKey(c)
+                        && orderIsOkay(stack)) {
+                    stack.add(c);
+                } else if (characters.containsKey(c)) {
+                    for (Character character : stack) {
+                        if (character != '('
+                                && character != ')') {
+                            rpnString.append(character);
+                        }
+                    }
+                    stack = new ArrayList<>();
+                }
+            }
+            if (numberIsOver) {
+                rpnString.append(' ');
+            }
+        }
+        rpnString.append(' ');
+        for (Character character : stack) {
+            if (character != '('
+                    && character != ')') {
+                rpnString.append(character);
+            }
+        }
 
 
         return rpnString.toString();
     }
 
-    private List<Double> fromDigitsToInts(List<Character> digits) {
-        List<Double> numbers = new ArrayList<>();
+    private boolean orderIsOkay(List<Character> stack) {
 
-        StringBuilder strNum = new StringBuilder();
-
-        for (Character c : digits) {
-            if (c != ' ') {
-                strNum.append(c);
-            } else {
-                double num = Double.parseDouble(strNum.toString());
-                strNum.delete(0, strNum.length());
-                numbers.add(num);
+        int prev = 0;
+        for (Character character : stack) {
+            int num = characters.get(character);
+            if (num <= prev) {
+                return false;
             }
+            prev = num;
         }
 
-
-        return numbers;
+        return true;
     }
+
+//    private List<Double> fromDigitsToInts(List<Character> digits) {
+//        List<Double> numbers = new ArrayList<>();
+//
+//        StringBuilder strNum = new StringBuilder();
+//
+//        for (Character c : digits) {
+//            if (c != ' ') {
+//                strNum.append(c);
+//            } else {
+//                double num = Double.parseDouble(strNum.toString());
+//                strNum.delete(0, strNum.length());
+//                numbers.add(num);
+//            }
+//        }
+//
+//
+//        return numbers;
+//    }
 
     private boolean validate(String input) {
         if (input == null || input.isBlank() || input.isEmpty()) {
@@ -77,7 +134,7 @@ public class Task053Impl implements Task053 {
         int amountOfDigits = 0;
         int amountOfOperators = 0;
         for (Character c : input.toCharArray()) {
-            if (!Character.isDigit(c) && !characters.contains(c)) {
+            if (!Character.isDigit(c) && !characters.containsKey(c)) {
                 return false;
             } else if (Character.isDigit(c)) {
                 amountOfDigits++;
