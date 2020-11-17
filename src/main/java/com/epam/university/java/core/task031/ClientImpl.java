@@ -11,11 +11,12 @@ public class ClientImpl implements Client {
 
     private Socket socket;
     private BufferedWriter out;
+    private boolean hasException;
 
     @Override
     public void sendMessage(String message) {
         if (message == null) {
-            throw new IllegalArgumentException();
+           hasException = true;
         }
         try {
             out.write(message + "\n");
@@ -42,6 +43,9 @@ public class ClientImpl implements Client {
         try {
             out.close();
             socket.close();
+            if (hasException){
+                throw new IllegalArgumentException();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
