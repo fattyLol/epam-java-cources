@@ -1,14 +1,8 @@
 package com.epam.university.java.core.task054;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.color.ColorSpace;
-import java.awt.color.ICC_ColorSpace;
-import java.awt.color.ICC_Profile;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ComponentColorModel;
-import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,11 +22,11 @@ public class Task054Impl implements Task054 {
 
             for (int i = minY; i < width; i++) {
                 for (int j = minX; j < height; j++) {
-                    int pixelRGB = image.getRGB(i, j);
+                    int pixelRgb = image.getRGB(i, j);
 
-                    int red = getRed(pixelRGB);
-                    int green = getGreen(pixelRGB);
-                    int blue = getBlue(pixelRGB);
+                    int red = getRed(pixelRgb);
+                    int green = getGreen(pixelRgb);
+                    int blue = getBlue(pixelRgb);
 
                     int grey = (red + green + blue) / 3;
                     Color color = new Color(grey, grey, grey);
@@ -61,11 +55,11 @@ public class Task054Impl implements Task054 {
 
             for (int i = minY; i < width; i++) {
                 for (int j = minX; j < height; j++) {
-                    int pixelRGB = image.getRGB(i, j);
+                    int pixelRgb = image.getRGB(i, j);
 
-                    int red = getRed(pixelRGB);
-                    int green = getGreen(pixelRGB);
-                    int blue = getBlue(pixelRGB);
+                    int red = getRed(pixelRgb);
+                    int green = getGreen(pixelRgb);
+                    int blue = getBlue(pixelRgb);
 
                     int newRed = (int) (0.393 * red + 0.769 * green + 0.189 * blue);
                     int newGreen = (int) (0.349 * red + 0.686 * green + 0.168 * blue);
@@ -109,8 +103,8 @@ public class Task054Impl implements Task054 {
 
             for (int i = minX; i < width; i++) {
                 for (int j = minY; j < height; j++) {
-                    int pixelRGB = image.getRGB(i, j);
-                    newImage.setRGB(width - i - 1,  j , pixelRGB);
+                    int pixelRgb = image.getRGB(i, j);
+                    newImage.setRGB(width - i - 1, j, pixelRgb);
                 }
             }
             newImage.flush();
@@ -122,7 +116,7 @@ public class Task054Impl implements Task054 {
             e.printStackTrace();
         }
 
-       return null;
+        return null;
     }
 
 

@@ -8,9 +8,7 @@ import java.util.Map;
 
 public class Task053Impl implements Task053 {
 
-//    private static final List<Character> characters = List.of(
-//            '+', '-', '*', '/', '^', '(', ')'
-//    );
+
 
     private static final Map<Character, Integer> characters = Map.of(
             '(', 0,
@@ -43,8 +41,6 @@ public class Task053Impl implements Task053 {
         digits.add(' ');
 
         String rpnString = fromInfiniteToRpn(input);
-
-//        List<Double> numbers = fromDigitsToInts(digits);
 
         return 0;
     }
@@ -103,25 +99,6 @@ public class Task053Impl implements Task053 {
 
         return true;
     }
-
-//    private List<Double> fromDigitsToInts(List<Character> digits) {
-//        List<Double> numbers = new ArrayList<>();
-//
-//        StringBuilder strNum = new StringBuilder();
-//
-//        for (Character c : digits) {
-//            if (c != ' ') {
-//                strNum.append(c);
-//            } else {
-//                double num = Double.parseDouble(strNum.toString());
-//                strNum.delete(0, strNum.length());
-//                numbers.add(num);
-//            }
-//        }
-//
-//
-//        return numbers;
-//    }
 
     private boolean validate(String input) {
         if (input == null || input.isBlank() || input.isEmpty()) {

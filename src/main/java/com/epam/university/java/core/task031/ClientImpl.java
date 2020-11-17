@@ -16,7 +16,7 @@ public class ClientImpl implements Client {
     @Override
     public void sendMessage(String message) {
         if (message == null) {
-           hasException = true;
+            hasException = true;
         }
         try {
             out.write(message + "\n");
@@ -43,7 +43,7 @@ public class ClientImpl implements Client {
         try {
             out.close();
             socket.close();
-            if (hasException){
+            if (hasException) {
                 throw new IllegalArgumentException();
             }
         } catch (IOException e) {
