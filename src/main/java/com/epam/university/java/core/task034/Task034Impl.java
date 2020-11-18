@@ -48,12 +48,12 @@ public class Task034Impl implements Task034 {
 
     @Override
     public Person readWithJaxbParser(String filepath) {
-        if (filepath == null){
+        if (filepath == null) {
             throw new IllegalArgumentException();
         }
         Person person = null;
         try {
-            File  file = new File(getClass().getResource(filepath).toURI());
+            File file = new File(getClass().getResource(filepath).toURI());
             JAXBContext jaxbContext = JAXBContext.newInstance(PersonImpl.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             person = (PersonImpl) unmarshaller.unmarshal(file);
