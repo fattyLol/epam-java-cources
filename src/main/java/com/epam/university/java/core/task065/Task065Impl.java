@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,12 @@ public class Task065Impl implements Task065 {
         Map<LocalDate, Double> trips = new HashMap<>();
         double totalDist = 0;
         int amountOfTrips = 0;
-        File file = new File(filepath);
+        File file = null;
+        try {
+            file = new File(getClass().getResource(filepath).toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         try {
             Document page = Jsoup.parse(file, "UTF-8");
 
