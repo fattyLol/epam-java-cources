@@ -7,7 +7,6 @@ import java.util.Objects;
 class Point {
     private int x;
     private int y;
-    private List<Point> possiblePoints;
 
     public Point(int x, int y) {
         this.x = x;
@@ -20,35 +19,14 @@ class Point {
         int baseX = this.getX();
         int baseY = this.getY();
 
-        int newX = baseX + 2;
-        int newY = baseY + 3;
+        int newX = baseX + 1;
+        int newY = baseY + 2;
         Point newPoint = new Point(newX, newY);
         if (isOnTheField(newPoint)) {
             points.add(newPoint);
         }
 
-        newX = baseX - 2;
-        newY = baseY + 3;
-        newPoint = new Point(newX, newY);
-        if (isOnTheField(newPoint)) {
-            points.add(newPoint);
-        }
-
-        newX = baseX + 3;
-        newY = baseY + 2;
-        newPoint = new Point(newX, newY);
-        if (isOnTheField(newPoint)) {
-            points.add(newPoint);
-        }
-
-        newX = baseX + 3;
-        newY = baseY - 2;
-        newPoint = new Point(newX, newY);
-        if (isOnTheField(newPoint)) {
-            points.add(newPoint);
-        }
-
-        newX = baseX + 3;
+        newX = baseX - 1;
         newY = baseY + 2;
         newPoint = new Point(newX, newY);
         if (isOnTheField(newPoint)) {
@@ -56,7 +34,29 @@ class Point {
         }
 
         newX = baseX + 2;
-        newY = baseY - 3;
+        newY = baseY - 1;
+        newPoint = new Point(newX, newY);
+        if (isOnTheField(newPoint)) {
+            points.add(newPoint);
+        }
+
+        newX = baseX + 2;
+        newY = baseY + 1;
+        newPoint = new Point(newX, newY);
+        if (isOnTheField(newPoint)) {
+            points.add(newPoint);
+        }
+
+        newX = baseX + 1;
+        newY = baseY - 2;
+        newPoint = new Point(newX, newY);
+        if (isOnTheField(newPoint)) {
+            points.add(newPoint);
+        }
+
+
+        newX = baseX - 1;
+        newY = baseY - 2;
         newPoint = new Point(newX, newY);
         if (isOnTheField(newPoint)) {
             points.add(newPoint);
@@ -64,28 +64,18 @@ class Point {
 
 
         newX = baseX - 2;
-        newY = baseY - 3;
+        newY = baseY - 1;
         newPoint = new Point(newX, newY);
         if (isOnTheField(newPoint)) {
             points.add(newPoint);
         }
 
-
-        newX = baseX - 3;
-        newY = baseY - 2;
+        newX = baseX - 2;
+        newY = baseY + 1;
         newPoint = new Point(newX, newY);
         if (isOnTheField(newPoint)) {
             points.add(newPoint);
         }
-
-        newX = baseX - 3;
-        newY = baseY + 2;
-        newPoint = new Point(newX, newY);
-        if (isOnTheField(newPoint)) {
-            points.add(newPoint);
-        }
-
-        this.possiblePoints = points;
 
         return points;
     }
@@ -132,5 +122,13 @@ class Point {
     @Override
     public int hashCode() {
         return Objects.hash(getX(), getY());
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }
