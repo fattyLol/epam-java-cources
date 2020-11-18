@@ -1,42 +1,49 @@
 package com.epam.university.java.core.task067;
 
-import java.util.ArrayList;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Task067Impl implements Task067 {
 
-    private int steps;
+    Map<Point, Integer> board = new HashMap<>();
 
     @Override
     public int knightMovements(int x1, int y1, int x2, int y2) {
-        steps = 100;
+
         final Point start = new Point(x1, y1);
         final Point end = new Point(x2, y2);
 
-        findWay(start, end, 1);
-
-        return steps;
+        for (int x = 1; x < 9; x++) {
+            for (int y = 1; y < 9; y++) {
+                board.put(new Point(x, y), null);
+            }
+        }
+        board.put(start, 0);
+        fillTheBoard();
+        while (board.get(end) == null) {
+            fillTheBoard();
+        }
+        return board.get(end);
     }
 
-    private List<Point> checkedPoints = new ArrayList<>();
+    int currentStep = 0;
 
-    public void findWay(Point from, Point to, int stepsBefore) {
+    private void fillTheBoard() {
+        for (Point point : board.keySet()) {
+            if (board.get(point) != null
+                    && board.get(point) == currentStep) {
+                final List<Point> points = point.findPossiblePoints();
 
-        checkedPoints.add(from);
-        final List<Point> possiblePoints = from.findPossiblePoints();
-
-        for (Point possiblePoint : possiblePoints) {
-            if (possiblePoint.equals(to)) {
-                if (stepsBefore < steps) {
-                    steps = stepsBefore;
+                for (Point point1 : points) {
+                    if (board.get(point1) == null
+                            || board.get(point1) > currentStep) {
+                        board.put(point1, currentStep + 1);
+                    }
                 }
-                return;
             }
         }
-        for (Point possiblePoint : possiblePoints) {
-            if (!checkedPoints.contains(possiblePoint)) {
-                findWay(possiblePoint, to, ++stepsBefore);
-            }
-        }
+        currentStep++;
     }
 }

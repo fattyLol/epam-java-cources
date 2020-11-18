@@ -115,8 +115,8 @@ class Point {
             return false;
         }
         Point point = (Point) o;
-        return getX() == point.getX() &&
-                getY() == point.getY();
+        return getX() == point.getX()
+                && getY() == point.getY();
     }
 
     @Override
@@ -124,11 +124,4 @@ class Point {
         return Objects.hash(getX(), getY());
     }
 
-    @Override
-    public String toString() {
-        return "Point{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
-    }
 }
