@@ -9,15 +9,18 @@ import java.util.Map;
 public class Task053Impl implements Task053 {
 
 
+    private static final List<String> characters = List.of(
+            "+", "-", "*", "/", "^", "(", ")"
+    );
 
-    private static final Map<Character, Integer> characters = Map.of(
-            '(', 0,
-            ')', 0,
+    private static final Map<Character, Integer> operators = Map.of(
             '+', 1,
             '-', 1,
             '*', 2,
             '/', 2,
-            '^', 3
+            '^', 3,
+            '(', 5,
+            ')', 0
 
     );
 
@@ -26,23 +29,80 @@ public class Task053Impl implements Task053 {
         if (!validate(input)) {
             throw new IllegalArgumentException();
         }
-        List<Character> digits = new ArrayList<>();
-        List<Character> operators = new ArrayList<>();
-
-
-        for (Character c : input.toCharArray()) {
-            if (Character.isDigit(c)) {
-                digits.add(c);
-            } else {
-                digits.add(' ');
-                operators.add(c);
-            }
-        }
-        digits.add(' ');
 
         String rpnString = fromInfiniteToRpn(input);
 
-        return 0;
+
+        StringBuilder builder;
+        while (!isCounted(rpnString)) {
+            builder = new StringBuilder();
+            String[] strings = rpnString.split(" ");
+            if (strings.length < 3) {
+                break;
+            }
+            String operator = null;
+            int index = 0;
+            for (int i = 0; i < strings.length; i++) {
+                if (characters.contains(strings[i])) {
+                    index = i;
+                    operator = strings[i];
+                    break;
+                }
+            }
+            double result = 0;
+            double first = Double.parseDouble(strings[index - 2]);
+            double second = Double.parseDouble(strings[index - 1]);
+
+            switch (operator) {
+                case "+": {
+                    result = first + second;
+                    break;
+                }
+                case "-": {
+                    result = first - second;
+                    break;
+                }
+                case "*": {
+                    result = first * second;
+                    break;
+                }
+                case "/": {
+                    result = first / second;
+                    break;
+                }
+                case "^": {
+                    result = Math.pow(first, second);
+                    break;
+                }
+                default: {
+                }
+            }
+
+            strings[index] = String.valueOf(result);
+            strings[index - 1] = "";
+            strings[index - 2] = "";
+
+            for (String string : strings) {
+                if (!string.isEmpty()) {
+                    builder.append(string).append(" ");
+                }
+            }
+            rpnString = builder.toString();
+        }
+
+        return Double.parseDouble(rpnString);
+    }
+
+    private boolean isCounted(String rpnString) {
+
+
+        for (char c : rpnString.toCharArray()) {
+            if (operators.containsKey(c)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
@@ -50,55 +110,60 @@ public class Task053Impl implements Task053 {
         StringBuilder rpnString = new StringBuilder();
         List<Character> stack = new ArrayList<>();
 
-        boolean numberIsOver;
-        for (Character c : infiniteStr.toCharArray()) {
-            if (Character.isDigit(c)) {
-                rpnString.append(c);
-                numberIsOver = false;
+
+        for (int i = 0; i < infiniteStr.length(); i++) {
+            char currChar = infiniteStr.charAt(i);
+            if (Character.isDigit(currChar)) {
+                rpnString.append(currChar);
             } else {
-                numberIsOver = true;
-                if (characters.containsKey(c)
-                        && orderIsOkay(stack)) {
-                    stack.add(c);
-                } else if (characters.containsKey(c)) {
-                    for (Character character : stack) {
-                        if (character != '('
-                                && character != ')') {
-                            rpnString.append(character);
+                if (currChar != '('
+                        && currChar != ')') {
+                    rpnString.append(' ');
+                }
+                stack.add(currChar);
+                while (!stackIsOkay(stack)) {
+                    char lastOperator = stack.remove(stack.size() - 2);
+                    if (lastOperator != '('
+                            && lastOperator != ')') {
+                        if (rpnString.charAt(rpnString.length() - 1) != ' ') {
+                            rpnString.append(' ').append(lastOperator);
+                        } else {
+                            rpnString.append(lastOperator).append(' ');
                         }
                     }
-                    stack = new ArrayList<>();
+                    if (lastOperator == '(') {
+                        stack.remove(stack.size() - 1);
+                    }
                 }
-            }
-            if (numberIsOver) {
-                rpnString.append(' ');
-            }
-        }
-        rpnString.append(' ');
-        for (Character character : stack) {
-            if (character != '('
-                    && character != ')') {
-                rpnString.append(character);
             }
         }
 
+        while (stack.size() != 0) {
+            char topCharacter = stack.remove(stack.size() - 1);
+            rpnString.append(" ").append(topCharacter);
+        }
 
         return rpnString.toString();
     }
 
-    private boolean orderIsOkay(List<Character> stack) {
 
-        int prev = 0;
+    private boolean stackIsOkay(List<Character> stack) {
+
+        int priority = 0;
         for (Character character : stack) {
-            int num = characters.get(character);
-            if (num <= prev) {
+            if (operators.get(character) <= priority) {
                 return false;
+            }
+            priority = operators.get(character);
+            if (character == '(') {
+                priority = 0;
+
             }
             prev = num;
         }
-
         return true;
     }
+
 
     private boolean validate(String input) {
         if (input == null || input.isBlank() || input.isEmpty()) {
@@ -111,7 +176,8 @@ public class Task053Impl implements Task053 {
         int amountOfDigits = 0;
         int amountOfOperators = 0;
         for (Character c : input.toCharArray()) {
-            if (!Character.isDigit(c) && !characters.containsKey(c)) {
+
+            if (!Character.isDigit(c) && !operators.containsKey(c)) {
                 return false;
             } else if (Character.isDigit(c)) {
                 amountOfDigits++;
