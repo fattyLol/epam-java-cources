@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Task053Impl implements Task053 {
 
+
     private static final List<String> characters = List.of(
             "+", "-", "*", "/", "^", "(", ")"
     );
@@ -20,6 +21,7 @@ public class Task053Impl implements Task053 {
             '^', 3,
             '(', 5,
             ')', 0
+
     );
 
     @Override
@@ -88,11 +90,11 @@ public class Task053Impl implements Task053 {
             rpnString = builder.toString();
         }
 
-
         return Double.parseDouble(rpnString);
     }
 
     private boolean isCounted(String rpnString) {
+
 
         for (char c : rpnString.toCharArray()) {
             if (operators.containsKey(c)) {
@@ -107,6 +109,7 @@ public class Task053Impl implements Task053 {
     private String fromInfiniteToRpn(String infiniteStr) {
         StringBuilder rpnString = new StringBuilder();
         List<Character> stack = new ArrayList<>();
+
 
         for (int i = 0; i < infiniteStr.length(); i++) {
             char currChar = infiniteStr.charAt(i);
@@ -143,6 +146,7 @@ public class Task053Impl implements Task053 {
         return rpnString.toString();
     }
 
+
     private boolean stackIsOkay(List<Character> stack) {
 
         int priority = 0;
@@ -153,10 +157,10 @@ public class Task053Impl implements Task053 {
             priority = operators.get(character);
             if (character == '(') {
                 priority = 0;
+
             }
+            prev = num;
         }
-
-
         return true;
     }
 
@@ -172,6 +176,7 @@ public class Task053Impl implements Task053 {
         int amountOfDigits = 0;
         int amountOfOperators = 0;
         for (Character c : input.toCharArray()) {
+
             if (!Character.isDigit(c) && !operators.containsKey(c)) {
                 return false;
             } else if (Character.isDigit(c)) {

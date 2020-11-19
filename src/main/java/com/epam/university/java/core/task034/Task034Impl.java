@@ -19,6 +19,9 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,10 +34,12 @@ public class Task034Impl implements Task034 {
         SaxHandlerImpl saxHandler = (SaxHandlerImpl) handler;
         try {
             SAXParser parser = factory.newSAXParser();
-            parser.parse(new File(filepath), saxHandler);
+            parser.parse(new File(getClass().getResource(filepath).toURI()), saxHandler);
             person = saxHandler.getPerson();
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
@@ -43,13 +48,18 @@ public class Task034Impl implements Task034 {
 
     @Override
     public Person readWithJaxbParser(String filepath) {
+        if (filepath == null) {
+            throw new IllegalArgumentException();
+        }
         Person person = null;
-        File file = new File(filepath);
         try {
+            File file = new File(getClass().getResource(filepath).toURI());
             JAXBContext jaxbContext = JAXBContext.newInstance(PersonImpl.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             person = (PersonImpl) unmarshaller.unmarshal(file);
         } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         return person;

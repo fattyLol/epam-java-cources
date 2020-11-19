@@ -25,9 +25,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book createBook() {
-        Resource resource = new XmlResource("/project/DefaultBookStateMachineDefinition.xml");
-        //Resource resource = new XmlResource("A:\\epam-java-cources\\src\\main"
-        //+ "\\resources\\project\\DefaultBookStateMachineDefinition.xml");
+        Resource resource = new XmlResource(getClass()
+                .getResource("/project//DefaultBookStateMachineDefinition.xml").getFile());
         StateMachineDefinition stateMachineDefinition =
                 stateMachineManager.loadDefinition(resource);
         StatefulEntity book =
