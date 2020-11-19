@@ -7,9 +7,18 @@ public class PillBox implements Comparable<PillBox> {
     private int dayFrom;
     private int dayTill;
 
+    /**
+     * Default pill box constructor.
+     */
     public PillBox() {
     }
 
+    /**
+     * Constructor for box of pills.
+     * @param number id number of box
+     * @param amountOfPills amount of pills in box
+     * @param dayFrom starting day of taking
+     */
     public PillBox(int number, int amountOfPills, int dayFrom) {
         this.number = number;
         this.amountOfPills = amountOfPills;

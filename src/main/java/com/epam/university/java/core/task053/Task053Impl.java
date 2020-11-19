@@ -159,7 +159,6 @@ public class Task053Impl implements Task053 {
                 priority = 0;
 
             }
-            prev = num;
         }
         return true;
     }
