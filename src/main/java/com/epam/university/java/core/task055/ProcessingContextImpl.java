@@ -20,6 +20,12 @@ public class ProcessingContextImpl implements ProcessingContext {
     private final List<HouseDefinition> houses;
 
 
+    /**
+     * Processing context constructor.
+     * Parses a provided XML and creates a context.
+     *
+     * @param path XML file path
+     */
     public ProcessingContextImpl(String path) {
         if (path == null) {
             throw new IllegalArgumentException();
@@ -31,7 +37,8 @@ public class ProcessingContextImpl implements ProcessingContext {
         XMLEventReader eventReader = null;
         HouseDefinitionImpl houseDefinition = null;
         try {
-            eventReader = factory.createXMLEventReader(new FileInputStream(getClass().getResource(path).getFile()));
+            eventReader = factory.createXMLEventReader(new FileInputStream(getClass()
+                    .getResource(path).getFile()));
             while (eventReader.hasNext()) {
                 XMLEvent event = eventReader.nextEvent();
                 if (event.isStartElement()) {
@@ -163,8 +170,8 @@ public class ProcessingContextImpl implements ProcessingContext {
         HouseDefinition theSmallestHouse = new HouseDefinitionImpl();
         theSmallestHouse.setArea(Double.POSITIVE_INFINITY);
         for (HouseDefinition house : houses) {
-            if (house.getArea() < theSmallestHouse.getArea() &&
-                    house.getArea() != 0) {
+            if (house.getArea() < theSmallestHouse.getArea()
+                    && house.getArea() != 0) {
                 theSmallestHouse = house;
             }
         }
